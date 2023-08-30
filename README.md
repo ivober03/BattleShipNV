@@ -1,5 +1,5 @@
 # Introduction:
-**Battleship** is a classic 2v2 game, originally played using paper and pencil.
+**Battleship** is a classic 1v1 game, originally played using paper and pencil.
 
 On a grid (usually 10 x 10) players hide ships of different lengths, either up and down or side to side (not diagonally), without any overlaps. For this project, we're using ships of lengths: 5, 4, 3, 3, 2 (which makes 17 possible targets out of the total 100 squares).
 
