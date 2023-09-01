@@ -1,7 +1,7 @@
-import random
-
-
 class Cell:
+    """
+    Represents a Cell in the board
+    """
 
     def __init__(self, row, col):
         """
@@ -14,6 +14,9 @@ class Cell:
 
 
 class Ship:
+    """
+    Represents a ship
+    """
 
     def __init__(self, size):
         """
@@ -75,6 +78,7 @@ class Sentence:
         Remove cells from the sentence.
         """
 
+
 class Battleship:
     """
     Battleship game representation
@@ -93,10 +97,12 @@ class Battleship:
         self.board = [] #remember to intialize the matrix board
         self.turn = "user"
         
+        
     def won(self):
         """
         Indicates if one of the players haves sunked all the enemy boats
         """
+
 
     def check_hit(self, cell):
         """
@@ -104,16 +110,112 @@ class Battleship:
         """
         self.cell = cell
 
+
     def switch_turn(self):
         """
         Switches the turn beetwen user and opponent
         """
-        if(self.turn == "user"):
+        if self.turn == "user":
             self.turn = "oponnent"
         else:
             self.turn = "user"
-            
 
+
+class OpponentAi:
+    """
+    Represents the AI opponent int he game
+    """
+    def __init__(self, width, heigth):
+
+        """
+        Implement:
+        
+        Self board
+        Oponent board
+        
+        """
+        self.width = width
+        self.heigth = heigth
+        self.pdf_matrix = [] #Represents the board where the IA makes his guesses
+        self.moves_made = set()
+        self.mode = "hunt"
+
+
+
+    def place_boats_random(self):
+        """
+        places the boats randomly
+        """
+
+
+    def calculate_pdf(self):
+        """
+        Calculates the probability density function and adds an euristic value to all the cells 
+        """
+
+
+    def make_guess(self):
+        """
+        Generates a guess based on sentences and the pdf
+        """
+
+
+    def hunt(self):
+        """
+        In Hunt mode, fire at random coordinates with even parity to increase chances of hitting ships.
+        """
+
+
+    def target(self):
+        """
+        In this mode:
+        1-Creates a sentence with 4 possible cells to continue hitting the boat
+        2-Select from that 4 cells who has the highest euristic value and fires(Iterative till found another part of the ship or sunked)
+        3-Creates a new sentence taking into account the orientation and all of the knowledge
+        4-Fires at the most probable cell from the sentence 
+        5-Iterate 3 and 4 till boat sunked
+        """
+
+    
+    def update_sentence(self):
+        """
+        Updates the sentence based on the guess result
+        """
+
+
+class User:
+    """
+    Represents the human player in the Game
+    """
+    def __init__ (self, width, heigth, user_ships ):
+        
+        self.width = width
+        self.heigth = heigth
+        self.board = []
+        self.user_ships = set(Ship)
+    
+
+    def place_boats(self):
+        """
+        Allows the user to place their ships on the board
+        """
+
+
+    def make_move(self):
+        """
+        Promts the user to make a guess and return the move coordinates
+        """    
+
+
+    def update_user_boardd(self, row, col, result):
+        """
+        Updates the user's board based on the guess result.
+        """
+
+
+
+        
+        
         
         
 
