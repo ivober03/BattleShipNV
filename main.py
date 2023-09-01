@@ -1,5 +1,6 @@
 import random
 
+
 class Cell:
 
     def __init__(self, row, col):
@@ -73,3 +74,51 @@ class Sentence:
         """
         Remove cells from the sentence.
         """
+
+class Battleship:
+    """
+    Battleship game representation
+    """
+
+    def __init__(self, width=10, heigth=10):
+        """
+        Implement:
+        User:create a instance of user class
+        OponnentIA: create a instance of OponentIA class
+        
+        
+        """
+        self.width = width
+        self.heigth = heigth
+        self.board = [] #remember to intialize the matrix board
+        self.turn = "user"
+        
+    def won(self):
+        """
+        Indicates if one of the players haves sunked all the enemy boats
+        """
+
+    def check_hit(self, cell):
+        """
+        Indicates if the guess at the specified cell is a hit or a miss
+        """
+        self.cell = cell
+
+    def switch_turn(self):
+        """
+        Switches the turn beetwen user and opponent
+        """
+        if(self.turn == "user"):
+            self.turn = "oponnent"
+        else:
+            self.turn = "user"
+            self.caca=2
+
+        
+        
+
+
+
+
+        
+            
