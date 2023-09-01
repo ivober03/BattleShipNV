@@ -112,7 +112,7 @@ class Battleship:
             self.turn = "oponnent"
         else:
             self.turn = "user"
-            self.caca=2
+            
 
         
         
