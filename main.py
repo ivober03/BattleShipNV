@@ -206,16 +206,7 @@ class User:
         """
         Updates the user's board based on the guess result.
         """
-
-
-
         
-        
-        
-        
-
-
-
 
         
             
