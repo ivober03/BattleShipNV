@@ -55,38 +55,47 @@ The PDFs strategy follows the next steps:
 There are two main files in this project: `runner.py` and  `battleship.py`. `battleship.py` contains all of the logic the game itself and for the AI to play as an opponent. `runner.py` contains all of the code to run the graphical interface for the game. 
 ## battleship.py file:
 
-### 1: **`Ship`** Class:
+### 1: **`Cell`** Class:
+The `Cell` class represents an individual cell on the game board. Each cell has two coordinates (row, col) and a probability density function (PDF) value, aiding in AI decision-making.
+
+Attributes:
+
+- `row`: The row index of the cell
+- `col`: The col index of the cell
+- `pdf_value`: A probability density function value for AI decision-making
+
+### 2: **`Ship`** Class:
 
 The `Ship` class represents a ship in the game. It's responsible for storing information about a ship's attributes and state. Each ship has a size (number of cells it occupies), a status (whether it's sunk or not), and the coordinates of its cells on the game board. The class helps manage ships' placement, status, and interactions with the game.
 
 Attributes:
 
-- `size`: The size of the ship (number of cells).
+- `health`: The size of the ship (number of cells).
 - `cells`: A `set()` containing the coordinates of the cells occupied by the ship.
-- `status`: The status of the ship, which can be "alive" or "sunk."
 
 Methods:
 
-- `place_on_board(self, start_row, start_col, orientation)`: Places the ship on the board by adding its occupied cells to the `cells` set.
-- `is_alive(self)`: Checks if the ship is still "alive" (has un-hit cells) or "sunk" (all cells hit).
+- `place_on_board(self, start_)`: Places the ship on the board by adding its occupied cells to the `cells` set.
+- `is_alive(self)`: Checks if the health is greater than 0. Returns true if the ship is still alive, false otherwise.
+- `hit(self)`: Handles a hit on the ship by decreasing its health by 1.
 
-### 2: **`Sentence`** Class: 
+### 3: **`Sentence`** Class: 
 
-The `Sentence` class represents a logical sentence that holds information about potential ship placements. It's used to track the possible positions of a ship based on known hits and misses. The class associates a ship with a set of cells where the ship might be located. As more information becomes available, the `Sentence` objects help narrow down possible ship positions.
+The `Sentence` class represents a logical sentence that holds information about potential ship placements. Once a ship is hit a new sentence is created using the position of the target. The initial sentence will have a `set()` with 4 or fewer potential targets. As more information becomes available, the `Sentence` objects help narrow down possible positions.
 
 Attributes:
 
-- `ship`: The associated `Ship` object.
+- `cell:` The initial cell that start the new sentence.
 - `cells`: A `set()` containing possible cell coordinates where the ship might be located.
 
 Methods:
 
-- `remove_cells(self, cells_to_remove)`: Removes specific cells from the `cells` set when information indicates those cells cannot contain the ship.
-- `update(self)`: Updates the sentence when new information is available.
+- `add_cells`: Add cells to the sentence
+- `remove_cells`: Remove cells from the sentence
 
-### 3: **`Battleship` Class:** 
+### 4: **`Battleship` Class:** 
 
-The `Battleship` class represents the main game control. It manages the game setup, the main game loop, and interactions between players. The class is responsible for starting the game, managing player turns, updating game boards, and checking for victory conditions. It creates instances of the `OpponentAI` and `User` classes and coordinates the gameplay.
+The `Battleship` class represents the main game control. The class is responsible for initializing the board, managing player turns, updating game boards, and checking for victory conditions. It creates instances of the `OpponentAI` and `User` classes and coordinates the gameplay.
 
 Attributes:
 
@@ -95,18 +104,15 @@ Attributes:
 - `num_boats`: The number of boats in the game.
 - `opponent_ai`: An instance of `OpponentAI` class.
 - `user`: An instance of `User` class.
-- `player_turn`: A variable indicating whose turn it is (user or opponent).
+- `turn`: A variable indicating whose turn it is (user or opponent).
 
 Methods:
 
-- `start_game(self)`: Initiates the game loop and manages the gameplay.
-- `check_hit_or_miss(self, row, col)`: Checks if a guess at the specified (row, col) is a hit or miss.
-- `initialize_pdf_matrices()`: Initialize probability density function matrices for each ship size. These matrices represent the likelihood of ships being in various positions on the grid.
-- `update_pdf_matrices(hit_cell, ship_size, is_horizontal)`: After each shot, update the PDF matrices based on the hit cell, ship size, and orientation. Reduce the probability of cells that are affected by the shot.
-- `normalize_pdf_matrices()`: Normalize the PDF matrices to ensure that probabilities add up to 1 for each ship size.
-- `switch_player_turn(self)`: Switches the turn between user and opponent.
+- `check_hit(self, cell)`: Checks if a guess at the specified cell is a hit or miss.
+- `switch_turn(self)`: Switches the turn between user and opponent.
+- `won(self)`: Returns true if one of  the players have sunk all the enemy boats
 
-### 4: **`OpponentAI` Class:** 
+### 5: **`OpponentAI` Class:** 
 
 The `OpponentAI` class represents the AI opponent in the game. It's responsible for generating its own game board and placing its ships randomly. The AI makes decisions on where to guess based on available information and strategies. This class interacts with the game through the `Battleship` class to provide a challenging opponent.
 
@@ -116,19 +122,21 @@ Attributes:
 
 - `board_width`: The width of the game board.
 - `board_height`: The height of the game board.
-- `opponent_board`: A 2D list representing the opponent's game board.
-- `sentences`: A list of `Sentence` objects representing logical sentences about possible ship positions.
+- `pdf_matrix`: A matrix representing the board. Each cell in this matrix is going to have a pdf value associated to them.
+- `moves_made`: A set containing all of the moves made. This set is going to be used in the pdf calculation.
+- `mode`: A variable that stores the mode that the AI is in. The AI can be in `hunt` mode or `target`mode.
 
 Methods:
 
 - `place_boats_randomly(self)`: Places boats randomly on the opponent's board.
-- `make_guess(self)`: Generates a guess based on logical inferences from sentences.
-- `set_mode(mode)`: Set the AI's mode to either **Hunt** or **Target** mode. **Hunt** mode involves firing at random coordinates, while **Target** mode focuses on potential targets from the PDF matrices.
+- `make_guess(self)`: Generates a guess based on logical inferences from sentences and pdf value
 - `hunt()`: In **Hunt** mode, fire at random coordinates with even parity to increase chances of hitting ships.  
--  `target()`: In **Target** mode, fire at the most probable cell based on PDF matrices. Adjust the mode if a hit occurs or all potential targets are exhausted.
-- `update_sentences(self, guess_result)`: Updates the sentences based on the guess result.
+- `target()`: In **Target** mode, fire at the most probable cell based on PDF matrices. Adjust the mode if a hit occurs or all potential targets are exhausted.
+- `calculate_pdf(self)`: Calculates the probability density function for each cell in the pdf_matrix.
+- `update_knowledge(self)`: Updates the sentence based on the guess result.
+- `generate_sentence(hit)`: Generate a new sentence once a new target is hit
 
-### 5: **`User` Class:** 
+### 6: **`User` Class:** 
 
 The `User` class represents the human player in the game. It's responsible for placing the user's ships on their own board and making guesses on the opponent's board. The class provides methods for user interaction, such as placing ships.
 
@@ -145,7 +153,7 @@ Methods:
 
 - `place_user_boats(self)`: Allows the user to place their ships on the board.
 - `make_move(self)`: Prompts the user to make a guess and returns the move coordinates.
-- `update_user_board(self, row, col, result)`: Updates the user's board based on the guess result.
+- `update_user_board(self, cell, result)`: Updates the user's board based on the guess result.
 
 # Credits
 We would like to acknowledge the following resources that contributed to the development of this game:
@@ -155,8 +163,3 @@ We would like to acknowledge the following resources that contributed to the dev
 - CS50AI Course: The game design and logic were inspired by concepts learned in the CS50AI course, which provided a foundation for creating intelligent opponents and game mechanics.
 
 - OpenAI: The development of this game was facilitated by the use of OpenAI's GPT-3.5 language model, which provided valuable assistance and guidance throughout the design and implementation process.
-
-
-
-
-
