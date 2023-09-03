@@ -10,11 +10,13 @@ Once both players hide their fleets, they take turns aiming at each other by say
 The player who sinks the other player's entire fleet (hitting all the spots with ships) wins the game.
 
 # Understanding: 
-The AI's strategy will consist of creating a stack of potential targets. Initially, the AI will be in **Hunt** mode, firing at random coordinates. Once it hits a ship, the AI switches to **Target** mode. After a hit, the four surrounding grid squares are added to a stack of 'potential' targets.
+The AI's strategy will consist of creating a stack of potential targets. Initially, the AI will be in **Hunt** mode, firing at random coordinates (taking into account some heuristic values). Once it hits a ship, the AI switches to **Target** mode. After a hit, the four surrounding grid squares are added to a stack of 'potential' targets.
 
 Cells should only be added to the stack if they have not already been visited.
 
-Once the AI enters **Target** mode, it shoots at the next potential target from the stack. If it hits again, then the surrounding cells of the coordinates where it hit are added to the stack of 'potential' targets. The AI leaves the **Target** mode once the ship has been sunk or there are no more potential targets on the stack.
+Once the AI enters in **Target** mode, it shoots at the next potential target from the stack. If it hits again, then a fresh stack of cells will be generated containing new 'potential' targets. The AI leaves the **Target** mode once the ship has been sunk or exhaust the stack.
+
+Note that the AI strategy is dynamic and only considers the most recent set of 'potential' targets. The AI will only take into account the ones generated with the last move. This aproach emulates how a human player might think while playing Battleship.
 
 ### Parity: 
 
@@ -163,3 +165,4 @@ We would like to acknowledge the following resources that contributed to the dev
 - CS50AI Course: The game design and logic were inspired by concepts learned in the CS50AI course, which provided a foundation for creating intelligent opponents and game mechanics.
 
 - OpenAI: The development of this game was facilitated by the use of OpenAI's GPT-3.5 language model, which provided valuable assistance and guidance throughout the design and implementation process.
+
