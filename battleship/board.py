@@ -3,7 +3,7 @@ from .constants import *
 class Board:
     def __init__(self):
         self.board = []
-        sel.selected_cell = None 
+        self.selected_cell = None 
         self.player_boats_left = self.ia_boats_left = 5
         
     # Fills the background with black and draws green lines on the squares
