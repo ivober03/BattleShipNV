@@ -1,6 +1,6 @@
 from .constants import *
 
-class Cells:
+class Cell:
     def __init__(self, row:int, col:int):
         self.row = row 
         self.col = col 
@@ -8,17 +8,14 @@ class Cells:
         self.boat = False
         self.pdf_value = 0
         
-        self.sx = 0
-        self.sy = 0
-        self.ex = 0
-        self.ey = 0
+        self.x = 0
+        self.y = 0
         self.calc_pos()
         
     def calc_pos(self):
-        self.sx = SQUARE_SIZE * self.row + SQUARE_SIZE // 2
-        self.sy = SQUARE_SIZE * self.col + SQUARE_SIZE // 2
-        self.ex = SQUARE_SIZE * self.row
-        self.ey = SQUARE_SIZE * self.col
+        self.x = SQUARE_SIZE * self.row  
+        self.y = SQUARE_SIZE * self.col 
+      
         
         
         
@@ -33,7 +30,7 @@ class Cells:
             status = "water"
             
     def draw_water(self, win ):
-        pygame.draw.aaline(win, GREEN, (self.sx, self.sy),(self.ex, self.ey), 1 )
+        win.blit(WATER_IMG,(x,y))
         
             
 

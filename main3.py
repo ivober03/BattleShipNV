@@ -29,7 +29,7 @@ def main():
             pass
       
       # Draws the board and update the window
-      board.draw_cells(WIN)
+      board.draw_board(WIN)
       pygame.display.update()
 
    pygame.quit()
