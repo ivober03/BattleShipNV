@@ -44,7 +44,7 @@ class Cell:
 
     def make_guess(self):
         """
-         Update the cell's status based on a player's guess.
+        Update the cell's status based on a player's guess.
         """
 
         # If the cell has a part of a ship, update it's status to "Ship"
