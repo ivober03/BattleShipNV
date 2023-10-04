@@ -47,7 +47,7 @@ class Cell:
          Update the cell's status based on a player's guess.
         """
 
-        # If the cell has a part of a ship update it's status to "Ship"
+        # If the cell has a part of a ship, update it's status to "Ship"
         if self.ship:
             self.status = Cell.POSSIBLE_STATUSES[2]
         # Otherwise, set it's status to "Water"
