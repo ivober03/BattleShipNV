@@ -16,7 +16,7 @@ class Ship:
         Constructor for the Ship class.
         """
 
-        self.cells = frozenset(cells)
+        self.cells = cells
         self.hitted_cells = set()
         self.size = len(cells)
         self.health = self.size

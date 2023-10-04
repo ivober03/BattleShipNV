@@ -1,6 +1,7 @@
 import pygame
 from battleship.constants import WIDTH, HEIGHT
 from battleship.board import Board
+from battleship.cells import Cell
 
 FPS = 60
 

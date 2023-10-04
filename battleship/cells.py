@@ -27,22 +27,16 @@ class Cell:
         self.row = row
         self.col = col
         # Initialize status to "Hidden" by default,
-        self.status = cell.POSSIBLE_STATUSES[0]
+        self.status = Cell.POSSIBLE_STATUSES[0]
         self.ship = False
         self.pdf_value = 0
         
         self.x = 0
         self.y = 0
 
-        self.sx = 0
-        self.sy = 0
-        self.ex = 0
-        self.ey = 0
+        
         self.calc_pos()
 
-
-    def set_boat(self):
-        self.boat = True
 
 
     def make_guess(self):
@@ -59,22 +53,18 @@ class Cell:
 
 
     def calc_pos(self):
-        self.x = SQUARE_SIZE * self.row  
-        self.y = SQUARE_SIZE * self.col 
+        self.x = SQUARE_SIZE * self.row
+        self.y = SQUARE_SIZE * self.col
       
         
-    def set_boat(self):
-        self.boat = True
+    def set_ship(self):
+        self.ship = True
         
             
     def draw_water_cell(self, win ):
-        win.blit(WATER_IMG,(x,y))
+        win.blit(WATER_IMG,(self.x,self.y))
           
-        self.sx = SQUARE_SIZE * self.row + SQUARE_SIZE // 2
-        self.sy = SQUARE_SIZE * self.col + SQUARE_SIZE // 2
-        self.ex = SQUARE_SIZE * self.row
-        self.ey = SQUARE_SIZE * self.col
-
+        
 
         
         
