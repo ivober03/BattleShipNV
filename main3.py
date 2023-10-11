@@ -6,7 +6,7 @@ from battleship.cells import Cell
 FPS = 60
 
 # Creates and names a new Window
-WIN = pygame.display.set_mode((WIDTH, HEIGHT))  
+WIN = pygame.display.set_mode((2*WIDTH, HEIGHT))  
 pygame.display.set_caption('Battleship')
 
 
@@ -15,7 +15,8 @@ def main():
 
    run = True
    clock = pygame.time.Clock() # Sets the fps to 60
-   board = Board() 
+   userboard = Board() # Change to user class later
+   enemyboard = Board()
 
    while run: 
       clock.tick(FPS)
@@ -30,7 +31,8 @@ def main():
             pass
       
       # Draws the board and update the window
-      board.draw_board(WIN)
+      userboard.draw_board(WIN,1)
+      enemyboard.draw_board(WIN,2)
       pygame.display.update()
 
    pygame.quit()

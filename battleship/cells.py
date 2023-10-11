@@ -12,6 +12,7 @@ Note that when the User and AI place their ships, this will be represented in th
 """
 
 class Cell:
+    
     """
     Represents a cell object in the board.
     """
@@ -33,8 +34,6 @@ class Cell:
         
         self.x = 0
         self.y = 0
-
-        
         self.calc_pos()
 
 
@@ -51,18 +50,27 @@ class Cell:
         else:
             self.status = Cell.POSSIBLE_STATUSES[1]
 
-
+    # Used to know where the img is put
     def calc_pos(self):
-        self.x = SQUARE_SIZE * self.row
-        self.y = SQUARE_SIZE * self.col
+        self.x = SQUARE_SIZE * self.row +PADDING
+        self.y = SQUARE_SIZE * self.col +PADDING
       
         
     def set_ship(self):
         self.ship = True
         
-            
+    # Draw the cell depending on the needs
     def draw_water_cell(self, win ):
         win.blit(WATER_IMG,(self.x,self.y))
+
+    def draw_ship_cell(self, win, img):
+        win.blit(img,(self.x, self.y))
+
+    def draw_ship_destroyed(self, win ):
+        win.blit(destroyedship.pngxd,(self.x, self.y))
+    
+
+
           
         
 
