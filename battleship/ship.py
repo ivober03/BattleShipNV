@@ -17,7 +17,10 @@ class Ship:
         """
 
         self.cells = cells
-        self.hitted_cells = set()
+        for i in range(len(cells)):
+            cells[i].set_ship()
+            
+            
         self.size = len(cells)
         self.health = self.size
 
@@ -29,15 +32,17 @@ class Ship:
 
         return self.health > 0
 
+    def get_cells(self):
+        return self.cells
+    
 
-    def hit(self, coord):
+    def hit(self, cell):
         """
         Decreases ship's health by 1 and stores the hitted cell.
         """
-
         if self.health != 0:
             self.health -= 1
-            self.hitted_cells.add(coord)
+            self.hitted_cells.add(cell)
 
 
     def is_a_hitted_cell(self, coord):

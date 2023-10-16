@@ -20,13 +20,14 @@ class Cell:
     # Define a class-level variable to hold possible status values
     POSSIBLE_STATUSES = ["Hidden", "Water", "Ship"]
 
-    def __init__(self, row:int, col:int):
+    def __init__(self, row:int, col:int, pos):
         """
         Constructor for the Cell class.
         """
-
+        self.pos = pos
         self.row = row
-        self.col = col
+        self.col = col  
+              
         # Initialize status to "Hidden" by default,
         self.status = Cell.POSSIBLE_STATUSES[0]
         self.ship = False
@@ -38,23 +39,30 @@ class Cell:
 
 
 
-    def make_guess(self):
+    def make_guess(self, win ):
         """
         Update the cell's status based on a player's guess.
         """
-
         # If the cell has a part of a ship, update it's status to "Ship"
-        if self.ship:
+        if self.ship == True:
             self.status = Cell.POSSIBLE_STATUSES[2]
+            self.draw_ship_destroyed(win)
         # Otherwise, set it's status to "Water"
         else:
             self.status = Cell.POSSIBLE_STATUSES[1]
+            self.draw_water_cell(win)
+            
+            
+        
 
     # Used to know where the img is put
     def calc_pos(self):
-        self.x = SQUARE_SIZE * self.row +PADDING
-        self.y = SQUARE_SIZE * self.col +PADDING
-      
+        if (self.pos == 2):
+            self.x = SQUARE_SIZE * self.row +PADDING + (WIDTH + SEPARATION) 
+            self.y = SQUARE_SIZE * self.col +PADDING
+        else:
+            self.x = SQUARE_SIZE * self.row +PADDING
+            self.y = SQUARE_SIZE * self.col +PADDING
         
     def set_ship(self):
         self.ship = True
@@ -63,8 +71,10 @@ class Cell:
     def draw_water_cell(self, win ):
         win.blit(WATER_IMG,(self.x,self.y))
 
-    def draw_ship_cell(self, win, img):
-        win.blit(img,(self.x, self.y))
+    def draw_ship_cell(self, win ):
+        
+        win.blit(BLACK_SURFACE,(self.x, self.y))
+        win.blit(SHIP_IMG,(self.x, self.y))
 
     def draw_ship_destroyed(self, win ):
         win.blit(destroyedship.pngxd,(self.x, self.y))
