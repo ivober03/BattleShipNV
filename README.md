@@ -34,7 +34,7 @@ Once the two-units boat is sunk, we can modify the parity rule for a broader spa
 
 ### Probability Density Functions: 
 
-At the start of every new turn, based on the ships still left in the battle, we’ll work out all possible locations that every ship could fit (horizontally or vertically).
+At the start of every new turn, based on the ships st is responsible for generating its own game board and placing its ships randomly.ill left in the battle, we’ll work out all possible locations that every ship could fit (horizontally or vertically).
 
 Initially, this will be pretty much anywhere, but as more and more shots are fired, some locations become less likely, and some impossible. Every time it’s possible for a ship to be placed in over a grid location, we’ll increment a counter for that cell. The result will be a superposition of probabilities
 
@@ -117,8 +117,6 @@ Methods:
 ### 5: **`OpponentAI` Class:** 
 
 The `OpponentAI` class represents the AI opponent in the game. It's responsible for generating its own game board and placing its ships randomly. The AI makes decisions on where to guess based on available information and strategies. This class interacts with the game through the `Battleship` class to provide a challenging opponent.
-
-The `OpponentAI` class represents the AI opponent in the game.
 
 Attributes:
 
