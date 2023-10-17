@@ -3,6 +3,7 @@ from battleship.constants import WIDTH, HEIGHT, SEPARATION, SQUARE_SIZE
 from battleship.board import Board
 from battleship.cells import Cell
 from battleship.user import User
+from battleship.ai import Ai
 
 FPS = 60
 
@@ -27,6 +28,7 @@ def main():
    userboard = Board(1) # Change to user class later
    enemyboard = Board(2)
    Player1 = User(userboard)
+   enemy = Ai(enemyboard)
    vueltas = 0
    while run:
       vueltas = 1+vueltas
@@ -50,8 +52,14 @@ def main():
       # Draws the board and update the window
       if vueltas == 1:
          Player1.get_board().draw_board(WIN)
-         enemyboard.draw_board(WIN)
-         
+         enemy.get_board().draw_board(WIN)
+         enemy.place_ship(WIN, 4)
+         enemy.place_ship(WIN, 2)
+         enemy.place_ship(WIN, 5)
+         enemy.place_ship(WIN, 3)
+         enemy.place_ship(WIN, 4)
+         enemy.place_ship(WIN, 4)
+         enemy.place_ship(WIN, 4)
          Player1.put_ship(((1,3),(2,3),(3,3),(4,3)), WIN)
          
          pygame.display.update()

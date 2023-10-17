@@ -7,8 +7,9 @@ The AI will make decisions on where to guess based on the information provided i
 """
 from .constants import *
 from .ship import *
+import random
 
-class AI:
+class Ai:
     """
     Represents a ship object in the game.
     """
@@ -24,7 +25,11 @@ class AI:
         self.board = board
         self.ships = []
         self.moves_made = set()
-        self.mode = AI.POSSIBLE_MODES[0]
+        self.mode = Ai.POSSIBLE_MODES[0]
+        
+    
+    def get_board(self):
+        return self.board
 
 
     def generate_coords(self, length):
@@ -53,7 +58,7 @@ class AI:
                     coords.append((start_row + i, start_col))
 
             # Check if the generated coordinates contain any cells with ships.
-            has_ship = any(self.board[row][col].ship for row, col in coords)
+            has_ship = any(self.board.get_cell(row, col).is_ship() for row, col in coords)
 
             # If there are no ships in the generated coordinates, return them.
             if not has_ship:

@@ -67,6 +67,9 @@ class Cell:
     def set_ship(self):
         self.ship = True
         
+    def is_ship(self):
+        return self.ship
+        
     # Draw the cell depending on the needs
     def draw_water_cell(self, win ):
         win.blit(WATER_IMG,(self.x,self.y))

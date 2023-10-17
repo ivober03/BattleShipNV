@@ -16,6 +16,7 @@ class User:
         
     
     def put_ship(self, coords, win):
+        # Todo: manjear poner el barco y obtener las celdas a partir de la primera celda y la orientacion
         """ This is the principal method to put the ships and manages all of the classes similar methods"""
         temp_cells = []
         # coords = set of tuples with the rows and cols of the selected cells to be ships 
