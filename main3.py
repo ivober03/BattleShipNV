@@ -7,15 +7,16 @@ from battleship.user import User
 FPS = 60
 
 # Creates and names a new Window
-WIN = pygame.display.set_mode((WIDTH + SEPARATION, HEIGHT)) 
+WIN = pygame.display.set_mode((2*WIDTH + SEPARATION, HEIGHT)) 
 
 pygame.display.set_caption('Battleship')
 
-def get_row_col_from_mouse(pos):
+def get_coords(pos):
    x, y = pos
-   row = y // SQUARE_SIZE
-   col = x // SQUARE_SIZE
-   return row, col
+   row = x // SQUARE_SIZE
+   col = y // SQUARE_SIZE
+   coords = ((row, col),)
+   return coords
 
 
 # Manages and launches the game loop (if it breaks one of the conditions the loop ends)
@@ -26,8 +27,9 @@ def main():
    userboard = Board(1) # Change to user class later
    enemyboard = Board(2)
    Player1 = User(userboard)
-
-   while run: 
+   vueltas = 0
+   while run:
+      vueltas = 1+vueltas
       clock.tick(FPS)
       
       # Catchs all the events made from pygame
@@ -38,16 +40,21 @@ def main():
 
         if event.type == pygame.MOUSEBUTTONDOWN:
             pos = pygame.mouse.get_pos()
-            int.row, int.col = get_row_col_from_mouse(pos)
-            Player1.put_ship(((row, col)), WIN)
+            coords = get_coords(pos)
+            for (row, col) in coords:
+               if (row < 10 and col<10):
+                  print (coords)
+                  Player1.put_ship(coords, WIN)
+                  pygame.display.update()
       
       # Draws the board and update the window
-      Player1.get_board().draw_board(WIN)
-      enemyboard.draw_board(WIN)
-      
-      Player1.put_ship(((1,3),(2,3),(3,3),(4,3)), WIN)
-      
-      pygame.display.update()
+      if vueltas == 1:
+         Player1.get_board().draw_board(WIN)
+         enemyboard.draw_board(WIN)
+         
+         Player1.put_ship(((1,3),(2,3),(3,3),(4,3)), WIN)
+         
+         pygame.display.update()
 
    pygame.quit()
 
