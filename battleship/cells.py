@@ -74,10 +74,10 @@ class Cell:
     def draw_water_cell(self, win ):
         win.blit(WATER_IMG,(self.x,self.y))
 
-    def draw_ship_cell(self, win ):
+    def draw_ship_cell(self, win, img ):
         
         win.blit(BLACK_SURFACE,(self.x, self.y))
-        win.blit(SHIP_IMG,(self.x, self.y))
+        win.blit(img,(self.x-5, self.y-5))
 
     def draw_ship_destroyed(self, win ):
         win.blit(destroyedship.pngxd,(self.x, self.y))

@@ -57,13 +57,12 @@ def main():
          enemy.place_ship(WIN, 2)
          enemy.place_ship(WIN, 5)
          enemy.place_ship(WIN, 3)
-         enemy.place_ship(WIN, 4)
-         enemy.place_ship(WIN, 4)
-         enemy.place_ship(WIN, 4)
-         Player1.put_ship(((1,3),(2,3),(3,3),(4,3)), WIN)
+         
+         Player1.put_ship(((1,3),(2,3),(3,3),(4,3), (5,3)), WIN)
          
          pygame.display.update()
 
    pygame.quit()
 
 main()
+

@@ -48,6 +48,7 @@ class Board:
         return self.board[row][col]
     
     def draw_board(self, win):
+        # todo : cambiar la imagen default del tablero
         self.draw_squares(win)
         for row in range(ROWS):
             for col in range(COLS):
@@ -55,9 +56,13 @@ class Board:
                 cell.draw_water_cell(win)
                 
     def draw_ship(self, win, ship):
-        for cell in ship.get_cells():
-            cell.draw_ship_cell(win)
-        
+        # Todo: change images depending on the boat
+        i=0
+        if(ship.size == 5):
+            for cell in ship.get_cells():
+                
+                cell.draw_ship_cell(win, BOATV5[i])
+                i = i+1
                 
     def update_board(self):
         pygame.display.update()

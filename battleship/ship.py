@@ -11,7 +11,7 @@ class Ship:
     Represents a ship object in the game.
     """
 
-    def  __init__(self, cells):
+    def  __init__(self, cells ):
         """
         Constructor for the Ship class.
         """

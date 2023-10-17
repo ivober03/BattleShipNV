@@ -2,6 +2,7 @@ import pygame
 
 class Game: 
     
-    def __init__(self):
+    def __init__(self, win):
         pass
+    
     

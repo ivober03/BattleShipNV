@@ -12,8 +12,9 @@ class User:
         return self.board
     
     def hit(self, row, col, cell):
+      # Todo : hit method is called when the ia wants to make a guess
       pass
-        
+
     
     def put_ship(self, coords, win):
         # Todo: manjear poner el barco y obtener las celdas a partir de la primera celda y la orientacion
