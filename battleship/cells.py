@@ -38,8 +38,7 @@ class Cell:
         self.calc_pos()
 
 
-
-    def make_guess(self, win ):
+    def update_status(self, win ):
         """
         Update the cell's status based on a player's guess.
         """
@@ -51,8 +50,6 @@ class Cell:
         else:
             self.status = Cell.POSSIBLE_STATUSES[1]
             self.draw_water_cell(win)
-            
-            
         
 
     # Used to know where the img is put
@@ -81,16 +78,3 @@ class Cell:
 
     def draw_ship_destroyed(self, win ):
         win.blit(destroyedship.pngxd,(self.x, self.y))
-    
-
-
-          
-        
-
-        
-        
-        
-    
-        
-        
-    
