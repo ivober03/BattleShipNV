@@ -7,9 +7,10 @@ The AI will make decisions on where to guess based on the information provided i
 """
 from .constants import *
 from .ship import *
+from .sentence import *
 import random
 
-class Ai:
+class OpponentAI:
     """
     Represents a ship object in the game.
     """
@@ -26,7 +27,7 @@ class Ai:
         self.ships = []
         self.opponent = user
         self.moves_made = set()
-        self.mode = Ai.POSSIBLE_MODES[0]
+        self.mode = OpponentAI.POSSIBLE_MODES[0]
 
         # List of potential targets
         self.knowledge = set()
@@ -108,7 +109,7 @@ class Ai:
 
         if (row + col) % 2 == 0:
             # Check if the cell contains a ship part
-            hit = opponent.ask_if_hit(row, col)
+            hit = self.opponent.ask_if_hit(row, col)
             
             # Store cell coords in a tuple
             cell = row, col
@@ -116,7 +117,7 @@ class Ai:
             return hit, cell
 
 
-    def make_guess(self, board, sentence):
+    def make_guess(self):
         """
         Makes a guess: at first the AI will start in 'Hunt' mode. 
         Once a ship is touched, the inferences will be put into the sentence and the AI ​​will enter 'target' mode
@@ -126,6 +127,7 @@ class Ai:
         if not self.knowledge:
             is_a_hit, cell = self.hunt()
         else:
+            pass
 
         # If the guess hit a ship, add new knowledge
         if is_a_hit:

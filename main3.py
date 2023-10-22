@@ -3,7 +3,7 @@ from battleship.constants import WIDTH, HEIGHT, SEPARATION, SQUARE_SIZE
 from battleship.board import Board
 from battleship.cells import Cell
 from battleship.user import User
-from battleship.ai import Ai
+from battleship.ai import OpponentAI
 
 FPS = 60
 
@@ -28,7 +28,7 @@ def main():
    userboard = Board(1) # Change to user class later
    enemyboard = Board(2)
    Player1 = User(userboard)
-   enemy = Ai(enemyboard)
+   enemy = OpponentAI(enemyboard, Player1)
    vueltas = 0
    while run:
       vueltas = 1+vueltas
