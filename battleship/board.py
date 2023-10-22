@@ -58,7 +58,16 @@ class Board:
     def draw_ship(self, win, ship):
         # Todo: change images depending on the boat
         i=0
-        if(ship.size == 5):
+        if (ship.size == 1):
+            for cell in ship.get_cells():
+                cell.draw_ship_cell(win, SHIP_IMG)
+        elif(ship.size == 2):
+            pass
+        elif(ship.size == 3):
+            pass
+        elif(ship.size  == 4):
+            pass
+        elif(ship.size == 5):
             for cell in ship.get_cells():
                 
                 cell.draw_ship_cell(win, BOATV5[i])

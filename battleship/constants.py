@@ -16,7 +16,9 @@ BLUE = (0, 255, 255)
 # Imgs
 BLACK_SURFACE = pygame.Surface((SQUARE_SIZE-10, SQUARE_SIZE-10))
 WATER_IMG = pygame.transform.scale(pygame.image.load(os.path.join("battleship/assets" , "Water.png") ), (SQUARE_SIZE-10, SQUARE_SIZE-10))
-SHIP_IMG = pygame.transform.scale(pygame.image.load(os.path.join("battleship/assets" , "Ship.png") ), (SQUARE_SIZE-10, SQUARE_SIZE-10))
+SHIP_IMG = pygame.transform.scale(pygame.image.load(os.path.join("battleship/assets" , "Ship.png") ), (SQUARE_SIZE, SQUARE_SIZE))
+
+PLACEHOLDER4 = pygame.image.load(os.path.join("battleship/assets/Placeholders" , "4Placeholder.png"))
 
 BOATH5 =  [ pygame.image.load(os.path.join("battleship/assets/5Boat/5BoatH" , "5Boat(1).png")), pygame.image.load(os.path.join("battleship/assets/5Boat/5BoatH" , "5Boat(2).png")), pygame.image.load(os.path.join("battleship/assets/5Boat/5BoatH" , "5Boat(3).png")), 
            pygame.image.load(os.path.join("battleship/assets/5Boat/5BoatH" , "5Boat(4).png")), pygame.image.load(os.path.join("battleship/assets/5Boat/5BoatH" , "5Boat(5).png"))]
