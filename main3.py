@@ -3,9 +3,8 @@ from battleship.constants import WIDTH, HEIGHT, SEPARATION, SQUARE_SIZE
 from battleship.board import Board
 from battleship.cells import Cell
 from battleship.user import User
-from battleship.ai import Ai
+from battleship.ai import OpponentAI
 from battleship.game import Game
-
 FPS = 60
 
 # Creates and names a new Window

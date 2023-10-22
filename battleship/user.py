@@ -11,9 +11,11 @@ class User:
     def get_board(self):
         return self.board
     
-    def hit(self, row, col, cell):
-      # Todo : hit method is called when the ia wants to make a guess
-      pass
+    def ask_if_hit(self, row, col):
+        """
+        Returns true if the cell passed as a parameter contains a ship
+        """     
+        return self.board.get_cell(row, col).is_ship
 
     
     def put_ship(self, coords, win):
