@@ -2,7 +2,7 @@ import pygame
 from .board import Board
 from .cells import Cell
 from .user import User
-from .ai import Ai
+from .ai import OpponentAI
 from .constants import *
 
 class Game: 
@@ -10,7 +10,7 @@ class Game:
     def __init__(self, win):
         self.state = "Put_boats_stage"
         self.Player1 = User(Board(1))
-        self.enemy = Ai(Board(2))
+        self.enemy = OpponentAI(Board(2), self.Player1)
         
         self.win = win
         self.vueltas = 0

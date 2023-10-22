@@ -1,6 +1,6 @@
 import pygame
 
-from battleship.cells import Cell
+from .cells import Cell
 from .constants import *
 
 class Board:
