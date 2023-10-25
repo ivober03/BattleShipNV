@@ -104,8 +104,8 @@ class OpponentAI:
         """
 
         # Generate random even row and column indices
-        row = 2 * random.randint(0, 4)  
-        col = 2 * random.randint(0, 4)  
+        row = 8  
+        col = 7
 
         # Check if the cell contains a ship part
         hit = self.opponent.ask_if_hit(row, col)
@@ -123,10 +123,14 @@ class OpponentAI:
         Once a ship is touched, the inferences will be put into the sentence and the AI ​​will enter 'target' mode
         """
 
+        is_a_hit = False
+        cell = None
+
         # if there is no knowledge about possible targets, enter 'Hunt' mode
         if not self.knowledge:
+
             is_a_hit, cell = self.hunt()
-            print(is_a_hit, cell)
+
             # If the guess hit a ship, add new knowledge
             if is_a_hit:
                 # Construct a new Sentence object and update knowledge
@@ -134,9 +138,10 @@ class OpponentAI:
 
                 for cell in new_knowledge.cells:
                     self.knowledge.add(cell) 
+
         else:
             pass
-
+        
         data = (is_a_hit, cell)
         return data
 
