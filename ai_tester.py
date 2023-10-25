@@ -6,7 +6,6 @@ from battleship.constants import *
 
 
 WIN = pygame.display.set_mode((2*WIDTH + SEPARATION, HEIGHT)) 
-pygame.display.set_caption('Battleship')
 
 def main():
 
@@ -27,6 +26,8 @@ def main():
         opponent.put_ship(((1, 3), (2, 3), (3, 3), (4, 3), (5, 3)), WIN)
         opponent.put_ship(((4, 7), (5, 7), (6, 7), (7, 7), (8, 7)), WIN)
         make_guess_test(ai)
+
+        Run = False
 
     pygame.quit()
 
@@ -52,3 +53,4 @@ def make_guess_test(ai):
         print(f"AI's guess: {cell}, Hit: {is_hit}")
         print(f"Knowledge: {knowledge_set}")
 
+main()
