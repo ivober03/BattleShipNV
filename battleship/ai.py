@@ -103,15 +103,23 @@ class OpponentAI:
         (later on, the hunt mode will take into account the pdf_value of each cell,
         so it can redirect the movements to cells with the highest chance of having a ship)
         """
+        row = 3
+        col = 3
+        cell = row, col
 
+        """
         # Generate random even row and column indices
-        row = random.randint(0, 9)  
-        col = random.randint(0, 9)  
+        while cell is None or cell in self.moves_made: 
+            row = random.randint(0, 9)  
+            col = random.randint(0, 9)  
+            cell = row, col
+        """
+
+        self.moves_made.add(cell) # Add the cell to the moves made set
 
         # Check if the cell contains a ship part
         hit = self.opponent.ask_if_hit(row, col)
         # Store cell coords in a tuple
-        cell = row, col
 
         data = (hit, cell)
 
@@ -143,25 +151,35 @@ class OpponentAI:
                 * else delete that cell from the knowledge set
         """
 
-        is_a_hit = False
-        knowledge = self.knowledge
-        cell = list(knowledge)[0]  # Convert the set to a list and then access the first element        
+        knowledge = list(self.knowledge.copy()) # Create a copy of the knowledge set and transform it into a list      
+        cell = knowledge[0]
+        hit = False
 
-        row, col = cell
-        hit = self.opponent.ask_if_hit(row, col)
+        if cell not in self.moves_made:
+            row, col = cell
+            hit = self.opponent.ask_if_hit(row, col)
+            self.moves_made.add(cell)
 
-        if hit:
-            orientation = self.get_orientation(self.last_hit, cell)
-            new_knowledge = Sentence(cell, orientation)  # Create new knowledge using the cell and its orientation
+            if hit:
+                orientation = self.get_orientation(self.last_hit, cell)
+                new_knowledge = Sentence(cell, orientation, self.moves_made)  # Create new knowledge using the cell and its orientation
                
-            # Modify knowledge based on the result
-            self.knowledge.clear()  # Clear the previous knowledge
-            self.knowledge.update(new_knowledge.cells)  # Add the cells from new knowledge
-            is_a_hit = True
-        else:
+                self.knowledge.update(new_knowledge.cells)  # Add the cells from new knowledge
+                print(f"AI's guess: {cell}, Hit: {hit}")
+                print(f"Removing cell: {cell}")
+                self.knowledge.remove(cell)
+
+            else:
+                print(f"AI's guess: {cell}, Hit: {hit}")
+                print(f"Removing cell: {cell}")
+                self.knowledge.remove(cell)
+
+        else: 
+            print(f"AI's guess: {cell}, Hit: {hit}")
+            print(f"Removing cell: {cell}")
             self.knowledge.remove(cell)
 
-        data = (is_a_hit, cell)
+        data = (hit, cell)
         return data
 
 
@@ -170,7 +188,7 @@ class OpponentAI:
         Makes a guess: at first the AI will start in 'Hunt' mode. 
         Once a ship is touched, the inferences will be put into the sentence and the AI ​​will enter 'target' mode
         """
-
+        
         is_a_hit = False
         cell = None
 
@@ -182,16 +200,15 @@ class OpponentAI:
             # If the guess shit a ship, add new knowledge
             if is_a_hit:
                 # Construct a new Sentence object and update knowledge
-                new_knowledge = Sentence(cell, None)
+                new_knowledge = Sentence(cell, None, self.moves_made)
                 self.knowledge.update(new_knowledge.cells)  # Add the cells from new knowledge
                 self.last_hit = cell # Store last hit
 
         # if there is knowledge about possible targets, enter 'Target' mode
         else:
+
             is_a_hit, cell = self.target_mode()
             self.last_hit = cell  # Store last hit
         
         data = (is_a_hit, cell)
         return data
-
-

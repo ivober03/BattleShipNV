@@ -25,7 +25,7 @@ def main():
                     
         opponent.put_ship(((1, 3), (2, 3), (3, 3), (4, 3), (5, 3)), WIN) # horizontal ship
         opponent.put_ship(((4, 2), (4, 3), (4, 4), (4, 5), (4, 8)), WIN) # vertical ship
-        for i in range(15):
+        for i in range(10):
             make_guess_test(ai)
 
         Run = False
@@ -46,12 +46,13 @@ def make_guess_test(ai):
         is_hit, cell = ai.make_guess()
         print(f"AI's guess: {cell}, Hit: {is_hit}")
         print(f"Knowledge: {knowledge_set}")
+        print("-----------------------------------------")
 
     # Simulate a situation where the AI has no knowledge
     else: 
         print("Testing 'make_guess' with knowledge:")
         is_hit, cell = ai.make_guess()
-        print(f"AI's guess: {cell}, Hit: {is_hit}")
         print(f"Knowledge: {knowledge_set}")
+        print("-----------------------------------------")
 
 main()
