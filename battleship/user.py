@@ -15,7 +15,7 @@ class User:
         """
         Returns true if the cell passed as a parameter contains a ship
         """     
-        return self.board.get_cell(row, col).is_ship
+        return self.board.get_cell(row, col).is_ship()
 
     
     def put_ship(self, coords, win):

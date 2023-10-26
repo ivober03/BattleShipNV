@@ -23,9 +23,10 @@ def main():
             if event.type == pygame.QUIT:
                 pygame.quit();
                     
-        opponent.put_ship(((1, 3), (2, 3), (3, 3), (4, 3), (5, 3)), WIN)
-        opponent.put_ship(((4, 7), (5, 7), (6, 7), (7, 7), (8, 7)), WIN)
-        make_guess_test(ai)
+        opponent.put_ship(((1, 3), (2, 3), (3, 3), (4, 3), (5, 3)), WIN) # horizontal ship
+        opponent.put_ship(((4, 2), (4, 3), (4, 4), (4, 5), (4, 8)), WIN) # vertical ship
+        for i in range(15):
+            make_guess_test(ai)
 
         Run = False
 

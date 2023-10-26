@@ -9,7 +9,7 @@ class Sentence:
     A sentence consists of a set of board cells which are possible targets.
     """
 
-    def __init__(self, cell):
+    def __init__(self, cell, orientation):
         """
         Constructor for the Sentence class.
         Initializes the sentence taking into account the ship passed as a parameter and it's 4 surrounding cells
@@ -21,15 +21,30 @@ class Sentence:
         # Extract the rom and col from the cell
         row, col = cell
 
-        # Calculate and add the cells immediately surrounding the hit cell as possible targets
-        if 0 <= (row - 1) <= 9:
-            self.cells.add((row - 1, col))
-        if 0 <= (row + 1) <= 9:
-            self.cells.add((row + 1, col))
-        if 0 <= (col - 1) <= 9:
-            self.cells.add((row, col - 1))
-        if 0 <= (col + 1) <= 9:
-            self.cells.add((row, col + 1))
+        # If it's the first hit:
+        if not orientation:
+
+            # Calculate and add the cells immediately surrounding the hit cell as possible targets
+            if 0 <= (row - 1) <= 9:
+                self.cells.add((row - 1, col))
+            if 0 <= (row + 1) <= 9:
+                self.cells.add((row + 1, col))
+            if 0 <= (col - 1) <= 9:
+                self.cells.add((row, col - 1))
+            if 0 <= (col + 1) <= 9:
+                self.cells.add((row, col + 1))
+
+        # Else check the orientation and add cells accordingly
+        elif orientation == 'horizontal':
+            if 0 <= (col - 1) <= 9:
+                self.cells.add((row, col - 1))  # Left cell
+            if 0 <= (col + 1) <= 9:
+                self.cells.add((row, col + 1))  # Right cell
+        else: 
+            if 0 <= (row - 1) <= 9:
+                self.cells.add((row - 1, col))  # Upper cell
+            if 0 <= (row + 1) <= 9:
+                self.cells.add((row + 1, col))  # Lower cell
 
 
     def add_cell(self, cell):

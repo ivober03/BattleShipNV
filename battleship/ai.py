@@ -26,13 +26,14 @@ class OpponentAI:
         self.board = board
         self.ships = []
         self.opponent = user
-        self.moves_made = set()
         self.mode = OpponentAI.POSSIBLE_MODES[0]
 
-        # List of potential targets
-        self.knowledge = set()
+        # AI state variables
+        self.knowledge = set() # List of potential targets
+        self.moves_made = set()
+        self.last_hit = None
+
         
-    
     def get_board(self):
         return self.board
     
@@ -96,7 +97,7 @@ class OpponentAI:
         return ship
 
 
-    def hunt(self):
+    def hunt_mode(self):
         """
         In Hunt mode, the AI will shoot at random coordinates with even parity
         (later on, the hunt mode will take into account the pdf_value of each cell,
@@ -104,8 +105,8 @@ class OpponentAI:
         """
 
         # Generate random even row and column indices
-        row = 8  
-        col = 7
+        row = random.randint(0, 9)  
+        col = random.randint(0, 9)  
 
         # Check if the cell contains a ship part
         hit = self.opponent.ask_if_hit(row, col)
@@ -116,8 +117,55 @@ class OpponentAI:
 
         return data
 
-    
-    def make_guess(self):
+
+    def get_orientation(self, cell_1, cell_2):
+        """
+        Determine the orientation of the ship based on two cells.
+        Returns 'horizontal' if the ship is horizontally placed,
+        'vertical' if the ship is vertically placed.
+        """
+        x1, y1 = cell_1
+        x2, y2 = cell_2
+
+        if x1 == x2:
+            return 'vertical'  # The ship is vertically placed
+        elif y1 == y2:
+            return 'horizontal'  # The ship is horizontally placed
+
+
+    def target_mode(self):
+        """
+        Enter target mode once a ship is hit, then:
+        1- From the knowledge set:
+            1.a- Select the first cell from the set and fire to its location.
+            1.b- Modify the sentence according to the result of the previous move:
+                * if the guess was a hit, create a new sentence with the two bordering cells.
+                * else delete that cell from the knowledge set
+        """
+
+        is_a_hit = False
+        knowledge = self.knowledge
+        cell = list(knowledge)[0]  # Convert the set to a list and then access the first element        
+
+        row, col = cell
+        hit = self.opponent.ask_if_hit(row, col)
+
+        if hit:
+            orientation = self.get_orientation(self.last_hit, cell)
+            new_knowledge = Sentence(cell, orientation)  # Create new knowledge using the cell and its orientation
+               
+            # Modify knowledge based on the result
+            self.knowledge.clear()  # Clear the previous knowledge
+            self.knowledge.update(new_knowledge.cells)  # Add the cells from new knowledge
+            is_a_hit = True
+        else:
+            self.knowledge.remove(cell)
+
+        data = (is_a_hit, cell)
+        return data
+
+
+    def make_guess(self): 
         """
         Makes a guess: at first the AI will start in 'Hunt' mode. 
         Once a ship is touched, the inferences will be put into the sentence and the AI ​​will enter 'target' mode
@@ -129,18 +177,19 @@ class OpponentAI:
         # if there is no knowledge about possible targets, enter 'Hunt' mode
         if not self.knowledge:
 
-            is_a_hit, cell = self.hunt()
+            is_a_hit, cell = self.hunt_mode()
 
-            # If the guess hit a ship, add new knowledge
+            # If the guess shit a ship, add new knowledge
             if is_a_hit:
                 # Construct a new Sentence object and update knowledge
-                new_knowledge = Sentence(cell)
+                new_knowledge = Sentence(cell, None)
+                self.knowledge.update(new_knowledge.cells)  # Add the cells from new knowledge
+                self.last_hit = cell # Store last hit
 
-                for cell in new_knowledge.cells:
-                    self.knowledge.add(cell) 
-
+        # if there is knowledge about possible targets, enter 'Target' mode
         else:
-            pass
+            is_a_hit, cell = self.target_mode()
+            self.last_hit = cell  # Store last hit
         
         data = (is_a_hit, cell)
         return data
