@@ -98,37 +98,6 @@ class OpponentAI:
         return ship
 
 
-    def hunt_mode(self):
-        """
-        In Hunt mode, the AI will shoot at random coordinates with even parity
-        (later on, the hunt mode will take into account the pdf_value of each cell,
-        so it can redirect the movements to cells with the highest chance of having a ship)
-        """
-        row = 3
-        col = 3
-        cell = row, col
-
-        """
-        # Generate random even row and column indices
-        while cell is None or cell in self.moves_made: 
-            row = random.randint(0, 9)  
-            col = random.randint(0, 9)  
-
-            cell = row, col # Store cell coords in a tuple
-        """
-
-        self.moves_made.add(cell) # Add the cell to the moves made set
-
-        # Check if the cell contains a ship part
-        hit = self.opponent.ask_if_hit(row, col)
-        if hit:
-            self.current_target.add(cell) # If the guess was a hit add that cell to the current target set
-
-        data = (hit, cell)
-
-        return data
-
-
     def get_orientation(self, cell_1, cell_2):
         """
         Determine the orientation of the ship based on two cells.
@@ -235,10 +204,11 @@ class OpponentAI:
 
             if hit:
                 self.current_target.add(cell) # If the guess was a hit add that cell to the current target set
+
                 orientation = self.get_orientation_from_current_target()
                 limits = self.get_ship_limits(self.current_target)
 
-                new_knowledge = Sentence(None, orientation, self.moves_made, self.current_target)  # Create new knowledge using the ship limits and its orientation
+                new_knowledge = Sentence(None, orientation, self.moves_made, limits)  # Create new knowledge using the ship limits and its orientation
 
                 self.knowledge.update(new_knowledge.cells)  # Add the cells from new knowledge
                 print(f"AI's guess: {cell}, Hit: {hit}")
@@ -260,6 +230,37 @@ class OpponentAI:
             self.knowledge.remove(cell)
 
         data = (hit, cell)
+        return data
+    
+
+    def hunt_mode(self):
+        """
+        In Hunt mode, the AI will shoot at random coordinates with even parity
+        (later on, the hunt mode will take into account the pdf_value of each cell,
+        so it can redirect the movements to cells with the highest chance of having a ship)
+        """
+
+        """
+        cell = None
+        # Generate random even row and column indices
+        while cell is None or cell in self.moves_made: 
+            row = random.randint(0, 9)  
+            col = random.randint(0, 9)  
+
+            cell = row, col # Store cell coords in a tuple
+        """
+        row = 3
+        col = 3
+        cell = row, col
+        self.moves_made.add(cell) # Add the cell to the moves made set
+
+        # Check if the cell contains a ship part
+        hit = self.opponent.ask_if_hit(row, col)
+        if hit:
+            self.current_target.add(cell) # If the guess was a hit add that cell to the current target set
+
+        data = (hit, cell)
+
         return data
 
 
@@ -288,6 +289,13 @@ class OpponentAI:
         # if there is knowledge about possible targets, enter 'Target' mode
         else:
             is_a_hit, cell = self.target_mode()
+            # Check if the ship is sunken:
+            if is_a_hit: 
+                if self.opponent.ask_if_sunken(cell):
+                    self.knowledge.clear()
+                    print("")
+                    print("Ship succesfully sunken.")
+                    print("Cleaning knowledge ...")
         
         data = (is_a_hit, cell)
         return data

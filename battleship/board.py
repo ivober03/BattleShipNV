@@ -31,7 +31,6 @@ class Board:
 
 
     # Creates the board internal matrix and fills it with type object cell  
-
     def create_board(self):
         for row in range(ROWS):
             self.board.append([])
@@ -47,6 +46,7 @@ class Board:
     def get_cell(self, row, col):
         return self.board[row][col]
     
+
     def draw_board(self, win):
         # todo : cambiar la imagen default del tablero
         self.draw_squares(win)
@@ -55,6 +55,7 @@ class Board:
                 cell = self.board[row][col]
                 cell.draw_water_cell(win)
                 
+
     def draw_ship(self, win, ship):
         # Todo: change images depending on the boat
         i=0
@@ -72,7 +73,8 @@ class Board:
                 
                 cell.draw_ship_cell(win, BOATV5[i])
                 i = i+1
-                
+
+
     def update_board(self):
         pygame.display.update()
         

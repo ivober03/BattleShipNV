@@ -11,7 +11,7 @@ class Ship:
     Represents a ship object in the game.
     """
 
-    def  __init__(self, cells ):
+    def  __init__(self, cells):
         """
         Constructor for the Ship class.
         """
@@ -23,17 +23,18 @@ class Ship:
             
         self.size = len(cells)
         self.health = self.size
+        self.hitted_cells = set()
 
 
-    def is_alive(self):
+    def sunken(self):
         """
-        Returns True if the ship is alive (health > 0), returns False otherwise.
+        Returns True if the ship is sunken (health = 0), returns False otherwise.
         """
+        return self.health == 0
 
-        return self.health > 0
 
     def get_cells(self):
-        return self.cells
+        return set(self.cells)
     
 
     def hit(self, cell):

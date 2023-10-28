@@ -38,6 +38,12 @@ class Cell:
         self.calc_pos()
 
 
+    def get_cell(self):
+        """
+        Returns the col and row of a given cell
+        """
+        return (self.row, self.col)
+
     def update_status(self, win ):
         """
         Update the cell's status based on a player's guess.
@@ -61,11 +67,14 @@ class Cell:
             self.x = SQUARE_SIZE * self.row +PADDING
             self.y = SQUARE_SIZE * self.col +PADDING
         
+
     def set_ship(self):
         self.ship = True
         
+
     def is_ship(self):
         return self.ship
+    
         
     # Draw the cell depending on the needs
     def draw_water_cell(self, win ):

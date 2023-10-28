@@ -11,11 +11,44 @@ class User:
     def get_board(self):
         return self.board
     
+
+    def get_ship(self, cell):
+        """
+        Given a cell, return the ship that contains it
+        """
+        
+        for ship in self.ships:
+
+            ship_set = set()
+            cells = ship.get_cells()
+
+            for ship_cell in cells:
+                ship_set.add(ship_cell.get_cell())
+
+            if cell in ship_set:
+                return ship
+            
+        return None  # Return None if the cell is not part of any ship
+
+
     def ask_if_hit(self, row, col):
         """
-        Returns true if the cell passed as a parameter contains a ship
+        Returns True if the cell passed as a parameter contains a ship.
+        Decreases ship's life by one.
         """     
-        return self.board.get_cell(row, col).is_ship()
+        hit = self.board.get_cell(row, col).is_ship()
+        if hit:
+           self.get_ship((row, col)).hit((row, col))
+
+        return hit
+
+
+    def ask_if_sunken(self, cell):
+        """
+        Given a ship, return True if sunken. False otherwise.
+        """ 
+        ship = self.get_ship(cell)
+        return ship.sunken()
 
     
     def put_ship(self, coords, win):
