@@ -11,42 +11,54 @@ class Sentence:
     A sentence consists of a set of board cells which are possible targets.
     """
 
-    def __init__(self, cell, orientation, moves_made):
+    def __init__(self, cell, orientation, moves_made, ship_limits):
         """
         Constructor for the Sentence class.
-        Initializes the sentence taking into account the ship passed as a parameter, the moves made and it's surrounding cells
+        Initializes a sentence taking into account the ship passed as a parameter, the moves made and it's surrounding cells
         """
 
         # Initialize an empty set to store the possible target cells
         self.cells = set()
 
-        # Extract the rom and col from the cell
-        row, col = cell
+        # If a cell is provided extract the row and col
+        if cell:
+            row, col = cell
 
-        # If it's the first hit:
-        if not orientation:
+        if orientation is not None:
+             
+            # Ship orientation is known, so add the cells based on ship limits
+            min_cell, max_cell = ship_limits
 
-        # Calculate and add the cells immediately surrounding the hit cell as possible targets
-            if 0 <= (row - 1) <= 9 and (row - 1, col) not in moves_made:
-                self.cells.add((row - 1, col))
-            if 0 <= (row + 1) <= 9 and (row + 1, col) not in moves_made:
-                self.cells.add((row + 1, col))
-            if 0 <= (col - 1) <= 9 and (row, col - 1) not in moves_made:
-                self.cells.add((row, col - 1))
-            if 0 <= (col + 1) <= 9 and (row, col + 1) not in moves_made:
-                self.cells.add((row, col + 1))
+            min_row, min_col = min_cell
+            max_row, max_col = max_cell
 
-        # Else check the orientation and add cells accordingly
-        elif orientation == 'vertical':
-            if 0 <= (col - 1) <= 9 and (row, col - 1) not in moves_made:
-                self.cells.add((row, col - 1))
-            if 0 <= (col + 1) <= 9 and (row, col + 1) not in moves_made:
-                self.cells.add((row, col + 1))
+            if orientation == 'vertical':
+
+                # Extend the range of cells above and below the ship
+                if 0 <= (min_col - 1) <= 9 and (min_row, min_col - 1) not in moves_made:
+                    self.cells.add((min_row, min_col - 1))
+                if 0 <= (max_col + 1) <= 9 and (max_row, max_row +1) not in moves_made:
+                    self.cells.add((max_row, max_row +1))
+
+            else:
+
+                # Extend the range of cells to the left and right of the ship
+                if 0 <= (min_row - 1) <= 9 and (min_row - 1, min_col) not in moves_made:
+                    self.cells.add((min_row - 1, min_col))
+                if 0 <= (max_row + 1) <= 9 and (max_row + 1, max_col) not in moves_made:
+                    self.cells.add((max_row + 1, max_col))
+                    
         else:
+
+            # Orientation is not known, calculate and add the cells surrounding the hit cell
             if 0 <= (row - 1) <= 9 and (row - 1, col) not in moves_made:
                 self.cells.add((row - 1, col))
             if 0 <= (row + 1) <= 9 and (row + 1, col) not in moves_made:
                 self.cells.add((row + 1, col))
+            if 0 <= (col - 1) <= 9 and (row, col - 1) not in moves_made:
+                self.cells.add((row, col - 1))
+            if 0 <= (col + 1) <= 9 and (row, col + 1) not in moves_made:
+                self.cells.add((row, col + 1))
 
 
     def add_cell(self, cell):

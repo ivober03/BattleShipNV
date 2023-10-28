@@ -27,12 +27,13 @@ class OpponentAI:
         self.ships = []
         self.opponent = user
         self.mode = OpponentAI.POSSIBLE_MODES[0]
+        self.moves_made = set()
+
 
         # AI state variables
         self.knowledge = set() # List of potential targets
-        self.moves_made = set()
-        self.last_hit = None
-
+        self.current_target = set() # List of the cells of the current target
+        self.cleansed_knowledge = True
         
     def get_board(self):
         return self.board
@@ -112,14 +113,16 @@ class OpponentAI:
         while cell is None or cell in self.moves_made: 
             row = random.randint(0, 9)  
             col = random.randint(0, 9)  
-            cell = row, col
+
+            cell = row, col # Store cell coords in a tuple
         """
 
         self.moves_made.add(cell) # Add the cell to the moves made set
 
         # Check if the cell contains a ship part
         hit = self.opponent.ask_if_hit(row, col)
-        # Store cell coords in a tuple
+        if hit:
+            self.current_target.add(cell) # If the guess was a hit add that cell to the current target set
 
         data = (hit, cell)
 
@@ -139,6 +142,76 @@ class OpponentAI:
             return 'vertical'  # The ship is vertically placed
         elif y1 == y2:
             return 'horizontal'  # The ship is horizontally placed
+        else:
+            return 'unknown'  # The orientation is unknown
+        
+
+    def get_orientation_from_current_target(self):
+        """
+        Determine the orientation of the ship based on two random cells from the self.current_target set.
+        Returns 'horizontal' if the ship is horizontally placed,
+        'vertical' if the ship is vertically placed.
+        """
+
+        if not self.current_target or len(self.current_target) < 2:
+            # Handle the case when the current_target set is empty or has less than 2 cells
+            return None
+
+        # Convert the current_target set to a list before using random.sample
+        current_target_list = list(self.current_target)
+
+        # Randomly select two cells from the current_target list
+        cell_1, cell_2 = random.sample(current_target_list, 2)
+
+        # Use the existing get_orientation method to determine the orientation
+        return self.get_orientation(cell_1, cell_2)
+    
+
+    def get_ship_limits(self, cells):
+        """
+        Given a set of cells representing a boat, return the two cells that represent the limits of the boat.
+        This method works for both vertical and horizontal boats.
+        """
+
+        if not cells:
+            # Handle the case when the boat_cells set is empty
+            return None, None
+
+        # Initialize min and max coordinates for both rows and columns
+        min_row, min_col = float('inf'), float('inf')
+        max_row, max_col = -1, -1
+
+        for cell in cells:
+            row, col = cell
+            # Update the min and max coordinates
+            min_row = min(min_row, row)
+            min_col = min(min_col, col)
+            max_row = max(max_row, row)
+            max_col = max(max_col, col)
+
+        # Create the cells representing the boat limits
+        min_cell = (min_row, min_col)
+        max_cell = (max_row, max_col)
+
+        return min_cell, max_cell
+    
+
+    def clear_knowledge(self, orientation, limits):
+        """
+        Once the AI knows the orientation of the current target, removes from self.knowledge the cells wich are known to not be from that ship.
+        """
+        
+        knowledge = set()
+        cell_1, cell_2 = limits
+
+        for cell in self.knowledge:
+            cell_orientation = self.get_orientation(cell, cell_1)
+
+            if cell_orientation == orientation:
+            # The cell is consistent with the known ship orientation
+                knowledge.add(cell)
+        
+        self.knowledge = knowledge
 
 
     def target_mode(self):
@@ -161,13 +234,20 @@ class OpponentAI:
             self.moves_made.add(cell)
 
             if hit:
-                orientation = self.get_orientation(self.last_hit, cell)
-                new_knowledge = Sentence(cell, orientation, self.moves_made)  # Create new knowledge using the cell and its orientation
-               
+                self.current_target.add(cell) # If the guess was a hit add that cell to the current target set
+                orientation = self.get_orientation_from_current_target()
+                limits = self.get_ship_limits(self.current_target)
+
+                new_knowledge = Sentence(None, orientation, self.moves_made, self.current_target)  # Create new knowledge using the ship limits and its orientation
+
                 self.knowledge.update(new_knowledge.cells)  # Add the cells from new knowledge
                 print(f"AI's guess: {cell}, Hit: {hit}")
                 print(f"Removing cell: {cell}")
                 self.knowledge.remove(cell)
+
+                if not self.cleansed_knowledge:
+                    self.clear_knowledge(orientation, limits)
+                    self.cleansed_knowledge = True
 
             else:
                 print(f"AI's guess: {cell}, Hit: {hit}")
@@ -200,15 +280,14 @@ class OpponentAI:
             # If the guess shit a ship, add new knowledge
             if is_a_hit:
                 # Construct a new Sentence object and update knowledge
-                new_knowledge = Sentence(cell, None, self.moves_made)
+                new_knowledge = Sentence(cell, None, self.moves_made, None)
                 self.knowledge.update(new_knowledge.cells)  # Add the cells from new knowledge
-                self.last_hit = cell # Store last hit
+                if self.cleansed_knowledge:
+                    self.cleansed_knowledge = False
 
         # if there is knowledge about possible targets, enter 'Target' mode
         else:
-
             is_a_hit, cell = self.target_mode()
-            self.last_hit = cell  # Store last hit
         
         data = (is_a_hit, cell)
         return data

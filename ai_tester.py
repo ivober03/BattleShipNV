@@ -52,6 +52,7 @@ def make_guess_test(ai):
     else: 
         print("Testing 'make_guess' with knowledge:")
         is_hit, cell = ai.make_guess()
+        knowledge_set = ai.knowledge
         print(f"Knowledge: {knowledge_set}")
         print("-----------------------------------------")
 
