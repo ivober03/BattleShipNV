@@ -4,7 +4,7 @@
 
 **BattleShipNV** is an implementation of the classic Battleship game. Featuring an intelligent AI opponent, this project delivers a strategic gaming experience with a unique aesthetic and an original soundtrack, setting it apart from the traditional Battleship game. 
 
-**Walk-through video:**
+### Walk-through video:
 
 ### Screenshots: 
 
