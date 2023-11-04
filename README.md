@@ -41,6 +41,8 @@ With knowledge of the ship's orientation, the AI updates its stack of potential 
 
 To prepare for situations where the first two hit cells may not belong to the same ship, the AI maintains a backup stack of the original potential cells.
 
+*The AI ​​returns to hunt mode only once the ship being targeted has sunk.*
+
 ### AI Optimization: 
 
 ### Parity: 
