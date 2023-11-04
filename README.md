@@ -73,7 +73,7 @@ The concept of PDFs involves determining the likelihood of various events occurr
 
 *completar*
 
-# How to run:
+## How to run:
 
 *completar*
 
