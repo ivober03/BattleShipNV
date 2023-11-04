@@ -43,7 +43,7 @@ To prepare for situations where the first two hit cells may not belong to the sa
 
 *The AI ​​returns to hunt mode only once the ship being targeted has sunk.*
 
-### AI Optimization: 
+## AI Optimization: 
 
 ### Parity: 
 
