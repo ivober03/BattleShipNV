@@ -15,7 +15,7 @@ class OpponentAI:
     Represents a ship object in the game.
     """
 
-    # Define a class-level variable to hold the AI modes
+    # Define a class-level variable to store the AI modes
     POSSIBLE_MODES = ["Target", "Hunt"]
 
     def __init__ (self, board, user):
@@ -26,15 +26,17 @@ class OpponentAI:
         self.board = board
         self.ships = []
         self.opponent = user
-        self.mode = OpponentAI.POSSIBLE_MODES[0]
-        self.moves_made = set()
-
 
         # AI state variables
+        self.mode = OpponentAI.POSSIBLE_MODES[0]
+        self.moves_made = set() # List of the moves made 
+        self.sunked_ships = set() # List of the sunked ships
         self.knowledge = set() # List of potential targets
         self.current_target = set() # List of the cells of the current target
         self.cleansed_knowledge = True
+        self.parity = 2 
         
+
     def get_board(self):
         return self.board
     
@@ -165,6 +167,12 @@ class OpponentAI:
         return min_cell, max_cell
     
 
+    def update_parity(self):
+        """
+        Update parity as AI sinks ships.
+        """
+
+
     def clear_knowledge(self, orientation, limits):
         """
         Once the AI knows the orientation of the current target, removes from self.knowledge the cells wich are known to not be from that ship.
@@ -240,17 +248,15 @@ class OpponentAI:
         so it can redirect the movements to cells with the highest chance of having a ship)
         """
 
-        """
         cell = None
+
         # Generate random even row and column indices
         while cell is None or cell in self.moves_made: 
             row = random.randint(0, 9)  
             col = random.randint(0, 9)  
 
             cell = row, col # Store cell coords in a tuple
-        """
-        row = 3
-        col = 3
+
         cell = row, col
         self.moves_made.add(cell) # Add the cell to the moves made set
 

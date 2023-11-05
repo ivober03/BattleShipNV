@@ -10,6 +10,15 @@ class Ship:
     """
     Represents a ship object in the game.
     """
+    
+    # Define a class-level variable to store the ship types
+    SHIP_TYPES = {
+        'Carrier': 5,
+        'Battleship': 4,
+        'Cruiser': 3,
+        'Submarine': 3,
+        'Destroyer': 2
+    }
 
     def  __init__(self, cells):
         """
@@ -24,6 +33,12 @@ class Ship:
         self.size = len(cells)
         self.health = self.size
         self.hitted_cells = set()
+
+        # Determine the ship type based on size
+        for name, size in Ship.SHIP_TYPES.items():
+            if size == self.size:
+                self.type = name
+                break
 
 
     def sunken(self):
