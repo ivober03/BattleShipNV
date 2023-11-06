@@ -37,8 +37,8 @@ class Sentence:
                 # Extend the range of cells above and below the ship
                 if 0 <= (min_col - 1) <= 9 and (min_row, min_col - 1) not in moves_made:
                     self.cells.add((min_row, min_col - 1))
-                if 0 <= (max_col + 1) <= 9 and (max_row, max_row +1) not in moves_made:
-                    self.cells.add((max_row, max_row +1))
+                if 0 <= (max_col + 1) <= 9 and (max_row, max_col +1) not in moves_made:
+                    self.cells.add((max_row, max_col +1))
 
             else:
 

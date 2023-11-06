@@ -33,8 +33,10 @@ class OpponentAI:
         self.sunked_ships = set() # List of the sunked ships
         self.knowledge = set() # List of potential targets
         self.current_target = set() # List of the cells of the current target
-        self.cleansed_knowledge = True
-        self.parity = 2 
+        self.cleansed_knowledge = True 
+
+        self.possible_parities = [2,3,4,5]
+        self.parity = self.possible_parities[0] # Set the default parity to be the lowest one
         
 
     def get_board(self):
@@ -167,11 +169,20 @@ class OpponentAI:
         return min_cell, max_cell
     
 
-    def update_parity(self):
+    def update_parity(self, ship):
         """
-        Update parity as AI sinks ships.
-        """
+        Update parity set by the sunked ship.
+        """ 
 
+        size = ship.size
+        possible_parities_copy = self.possible_parities.copy()  
+        for parity in possible_parities_copy:
+            if parity == size:
+                self.possible_parities.remove(parity)
+            break
+
+        self.parity = self.possible_parities[0] # updates parity
+        
 
     def clear_knowledge(self, orientation, limits):
         """
@@ -197,7 +208,7 @@ class OpponentAI:
         1- From the knowledge set:
             1.a- Select the first cell from the set and fire to its location.
             1.b- Modify the sentence according to the result of the previous move:
-                * if the guess was a hit, create a new sentence with the two bordering cells.
+                * if the guess was a hit, create a new sentence with the two bordering cells.********
                 * else delete that cell from the knowledge set
         """
 
@@ -243,27 +254,27 @@ class OpponentAI:
 
     def hunt_mode(self):
         """
-        In Hunt mode, the AI will shoot at random coordinates with even parity
+        In Hunt mode, the AI will shoot at random coordinates with the corresponding parity
         (later on, the hunt mode will take into account the pdf_value of each cell,
         so it can redirect the movements to cells with the highest chance of having a ship)
         """
 
         cell = None
 
-        # Generate random even row and column indices
-        while cell is None or cell in self.moves_made: 
+        while cell is None:
             row = random.randint(0, 9)  
-            col = random.randint(0, 9)  
+            col = random.randint(0, 9) 
 
-            cell = row, col # Store cell coords in a tuple
-
-        cell = row, col
-        self.moves_made.add(cell) # Add the cell to the moves made set
+            if row % self.parity == 0 and col % self.parity == 0:
+                if (row, col) not in self.moves_made:
+                    cell = row, col  # Store cell
+                    self.moves_made.add(cell)  # Add the cell to the moves made set
 
         # Check if the cell contains a ship part
-        hit = self.opponent.ask_if_hit(row, col)
+        hit = self.opponent.ask_if_hit(cell[0], cell[1])
+        
         if hit:
-            self.current_target.add(cell) # If the guess was a hit add that cell to the current target set
+            self.current_target.add(cell)  # If the guess was a hit, add that cell to the current target set
 
         data = (hit, cell)
 
@@ -296,11 +307,17 @@ class OpponentAI:
         else:
             is_a_hit, cell = self.target_mode()
             # Check if the ship is sunken:
-            if is_a_hit: 
-                if self.opponent.ask_if_sunken(cell):
+            if is_a_hit:
+                sunken =  self.opponent.ask_if_sunken(cell)
+                if sunken:
+                    ship = self.opponent.get_ship(cell)
+                    self.sunked_ships.add(ship)
+                    self.update_parity(ship) # Updates the parity taking into account the sunked ship
                     self.knowledge.clear()
-                    print("")
-                    print("Ship succesfully sunken.")
+                    print("-----------------------------------------")
+                    print(f"{ship.type} succesfully sunken.")
+                    print(f"Parity set: {self.possible_parities}")
+                    print(f"Current parity: {self.parity}")
                     print("Cleaning knowledge ...")
         
         data = (is_a_hit, cell)
