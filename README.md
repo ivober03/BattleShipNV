@@ -47,13 +47,9 @@ To prepare for situations where the first two hit cells may not belong to the sa
 
 ### Parity: 
 
-Because the smallest ship is at least two units long, we don't need to search every corner of the board randomly. Even the shortest ship needs to cover two neighboring squares.
+Because the smallest ship is at least two units long, we don't need to search every corner of the board randomly. Even the shortest ship needs to cover two neighboring squares.
 
-Think of the board as a checkerboard, like the grid on the left. No matter how we position the two-unit destroyer on the grid, it will always span one white and one black square.
-
-The black squares on the grid have _even parity_, while the white squares have _odd parity_.
-
-We can tell our **Hunt** strategy to only shoot randomly at unknown locations with even parity. Even if we only fire at black locations, we'll manage to hit every ship — there's no way to position a ship without touching at least one blue square.
+We can tell our **Hunt** strategy to only shoot randomly at unknown locations with even parity.
 
 Once a target is hit and **Target** mode is turned on, the 'parity' rule no longer applies, allowing us to investigate all potential targets. If the algorithm switches back to **Hunt** mode, the parity filter is turned on again.
 
