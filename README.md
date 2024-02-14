@@ -8,7 +8,7 @@
 
 ### Screenshots: 
 
-*completar*
+
 
 
 ## AI Methodology
@@ -47,7 +47,9 @@ To prepare for situations where the first two hit cells may not belong to the sa
 
 ### Parity: 
 
-Because the smallest ship is at least two units long, we don't need to search every corner of the board randomly. Even the shortest ship needs to cover two neighboring squares.
+Because the smallest ship is at least two units long, we don't need to search every corner of the board randomly. Even the shortest ship needs to cover two neighboring squares.
+
+
 
 We can tell our **Hunt** strategy to only shoot randomly at unknown locations with even parity.
 
@@ -67,11 +69,9 @@ The concept of PDFs involves determining the likelihood of various events occurr
 
 ## Specification:
 
-*completar*
 
 ## How to run:
 
-*completar*
 
 ## Credits
 
